@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
-func HandleMongoFetch(w http.ResponseWriter, r *http.Request) {
+func HandleMongoFetch(w http.ResponseWriter, r *http.Request) error {
 	fmt.Println("Data fetched from mongo db")
+	return nil
 }

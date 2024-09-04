@@ -15,8 +15,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	http.HandleFunc("/mongo", handlers.HandleMongoFetch)
-	http.HandleFunc("/in-memory", handlers.HandleFetchFromInMemory)
+	http.HandleFunc("/mongo", handlers.Make(handlers.HandleMongoFetch))
+	http.HandleFunc("/in-memory", handlers.Make(handlers.HandleFetchFromInMemory))
 
 	fmt.Printf("Server is starting on port %s...\n", os.Getenv("SERVER_PORT"))
 	if err := http.ListenAndServe(os.Getenv("SERVER_PORT"), nil); err != nil {
