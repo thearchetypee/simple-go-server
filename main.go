@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
+	"github.com/simple-go-server/config"
 	"github.com/simple-go-server/db"
 	"github.com/simple-go-server/handlers"
 )
@@ -23,8 +24,10 @@ func main() {
 	}
 	defer client.Disconnect(context.TODO())
 
-	http.HandleFunc("/mongo", handlers.Make(handlers.HandleMongoFetch))
-	http.HandleFunc("/in-memory", handlers.Make(handlers.HandleFetchFromInMemory))
+	config := config.NewConfig(client)
+
+	http.HandleFunc("/mongo", handlers.WithConfig(config, handlers.HandleMongoFetch))
+	http.HandleFunc("/in-memory", handlers.WithConfig(config, handlers.HandleFetchFromInMemory))
 
 	fmt.Printf("Server is starting on port %s...\n", os.Getenv("SERVER_PORT"))
 	if err := http.ListenAndServe(os.Getenv("SERVER_PORT"), nil); err != nil {

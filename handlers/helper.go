@@ -1,10 +1,13 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"log/slog"
 	"net/http"
+
+	"github.com/simple-go-server/config"
 )
 
 type APIFunc func(w http.ResponseWriter, r *http.Request) error
@@ -13,9 +16,10 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
-func Make(h APIFunc) http.HandlerFunc {
+func WithConfig(cfg *config.Config, h APIFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := h(w, r)
+		ctx := context.WithValue(r.Context(), config.ConfigKey, cfg)
+		err := h(w, r.WithContext(ctx))
 		if err != nil {
 			handleError(w, r, err)
 		}

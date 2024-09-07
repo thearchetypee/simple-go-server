@@ -12,6 +12,7 @@ import (
 	"github.com/simple-go-server/models"
 )
 
+// Call this method to insert data into db
 func insert() {
 	uri := os.Getenv("MONGO_URI")
 

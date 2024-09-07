@@ -10,6 +10,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
+const DB_NAME = "simple-go-server"
+const TABLE_NAME = "records"
+
 func ConnectToMongoDb(uri string) (*mongo.Client, error) {
 	client, err := mongo.NewClient(options.Client().ApplyURI(uri))
 
