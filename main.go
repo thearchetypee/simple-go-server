@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 
 	"github.com/joho/godotenv"
+	"github.com/simple-go-server/db"
 	"github.com/simple-go-server/handlers"
 )
 
@@ -14,6 +16,12 @@ func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)
 	}
+	uri := os.Getenv("MONGO_URI")
+	client, err := db.ConnectToMongoDb(uri)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer client.Disconnect(context.TODO())
 
 	http.HandleFunc("/mongo", handlers.Make(handlers.HandleMongoFetch))
 	http.HandleFunc("/in-memory", handlers.Make(handlers.HandleFetchFromInMemory))
